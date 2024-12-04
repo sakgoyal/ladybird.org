@@ -13,16 +13,21 @@ const posts = defineCollection({
   }),
 });
 
-const newsletter = defineCollection({
+const newsletterSchema = z.object({
+  description: z.string().max(280),
+  date: z.date(),
+  draft: z.boolean().optional(),
+  title: z.string().optional(),
+}).strict();
+
+const newsletters = defineCollection({
   loader: glob({ pattern: "**/*.mdx", base: "./src/content/newsletters" }),
-  schema: z.object({
-    description: z.string().max(280),
-    date: z.date(),
-    draft: z.boolean().optional(),
-  }),
+  schema: newsletterSchema,
 });
 
 export const collections = {
   posts,
-  newsletter,
+  newsletters,
 };
+
+export type Newsletter = z.infer<typeof newsletterSchema>;
